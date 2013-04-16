@@ -70,7 +70,7 @@ def check_types(func_params, args):
 def get_truetype_font(name='verdana.ttf', size=20):
     dist = pkg_resources.get_distribution('plrutils')
     font_path = os.path.join(dist.location, 'plrutils', 'fonts', name)
-    assert os.path.exists(font_path)  # asserts ftw!
+    assert os.path.exists(font_path), '{0} font does not exist!'.format(name)
     return ImageFont.truetype(font_path, size=size)
 
 
