@@ -6,7 +6,6 @@ from models import GraphFunction
 from django.core.exceptions import MultipleObjectsReturned
 from utils import check_types, TypeNotSupported, draw_message, draw_legend
 
-
 def functions_list(request):
     # robadiroberto (suona anche bene)
     pass
@@ -50,6 +49,8 @@ def execute(request, func_args):
 
     try:
         cursor.callproc(func_name, args)
+        buff = cursor.fetchall()[0]
+        cursor.callproc('plr_get_raw', buff)
         buff = cursor.fetchall()[0][0]
     except DataError:
         response = draw_message('Error! Invalid data.')
@@ -61,7 +62,7 @@ def execute(request, func_args):
         response.status_code = 500
         return response
 
-    response = HttpResponse(buff[22:], mimetype="image/png", status=200)
+    response = HttpResponse(buff, content_type="image/png", status=200)
     return response
 
 
